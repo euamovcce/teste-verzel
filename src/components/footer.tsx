@@ -1,7 +1,7 @@
 import logowhite from '../assets/vercarwhite.png'
 export function Footer() {
     return (
-        <div className="bg-black absolute bottom-0 w-full">
+        <div className="bg-black  w-full">
             <div className="max-w-7xl w-full mx-auto my-0 py-8 px-4">
                 <div><a href='#'><img src={logowhite}/></a></div>
                 <ul className="grid grid-cols-3 gap-2 my-4">
