@@ -1,9 +1,9 @@
 import logowhite from '../assets/vercarwhite.png'
 export function Footer() {
     return (
-        <div className="bg-black  w-full">
+        <div className="bg-black  w-full font-vazirmatn">
             <div className="max-w-7xl w-full mx-auto my-0 py-8 px-4">
-                <div><a href='#'><img src={logowhite}/></a></div>
+                <div><a href='#'><img src={logowhite} /></a></div>
                 <ul className="grid grid-cols-3 gap-2 my-4">
                     <li><a className="text-sm hover:underline" href="#">Comprar carro</a></li>
                     <li><a className="text-sm hover:underline" href="#">Perguntas frequentes</a></li>
@@ -14,15 +14,12 @@ export function Footer() {
                     <li><a className="text-sm hover:underline" href="#">App Kavak</a></li>
                     <li><a className="text-sm hover:underline" href="#">Guia de preços</a></li>
                     <li><a className="text-sm" href="">🇧🇷 Brasil</a></li>
-                    <li><a className="text-sm hover:underline" href="#">Onde estamos</a></li>                                      
+                    <li><a className="text-sm hover:underline" href="#">Onde estamos</a></li>
                     <li><a className="text-sm over:underline" href="#">Carreiras</a></li>
-                    
-                    
-                  
+
+
+
                 </ul>
-                <div>
-                    <a>Social media</a>
-                </div>
                 <div className="border-b-4 border-white h-14">
 
                 </div>

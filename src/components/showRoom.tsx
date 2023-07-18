@@ -1,56 +1,77 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/axios';
+import { Car } from "../interface/CarData";
 
-interface Car {
-    id: number;
-    name: string;
-    brand: string;
-    model: string;
-    price: number;
-    main_photo: string;
-    second_photo: string;
-    third_photo: string;
-    fourth_photo: string;
-    active: boolean;
-}
 
 export function ShowRoom() {
-    const [cars, setCars] = useState<Car[]>([]);
+  const [cars, setCars] = useState<Car[]>([]);
+  const [sortedCars, setSortedCars] = useState<Car[]>([]);
+  const [sortByPrice, setSortByPrice] = useState(false);
 
-    useEffect(() => {
-        // Faz a chamada GET para obter os dados de carros
-        api.get('/home')
-            .then((response) => {
-                // Atualiza o estado com os dados recebidos da API
-                setCars(response.data);
-            })
-            .catch((error) => {
-                // Manipule erros aqui
-                console.error(error);
-            });
-    }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get('/');
+        setCars(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-    return (
-        <div>
-            <h1 className='text-black'>Lista de Carros</h1>
-            <div className='max-w-6xl w-full mx-auto my-0'>
-                <ul className='text-black grid grid-cols-3 gap-3'>
-                    {cars.map((car) => (
-                        <li key={car.id}
-                            className=''
-                        >
-                            <div><img src={car.main_photo} /></div>
-                            <div className='bg-zinc-600'> 
-                                <span className=''>{car.name}</span>
-                                <span>{car.brand}</span>
-                                <span>{car.model}</span>
-                                <p className=''>{car.price}R$</p>
+    fetchData();
+  }, []);
 
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+  useEffect(() => {
+    const sorted = [...cars];
+    if (sortByPrice) {
+      sorted.sort((a, b) => a.price - b.price);
+    } else {
+      sorted.sort((a, b) => a.id - b.id);
+    }
+    setSortedCars(sorted);
+  }, [sortByPrice, cars]);
+
+  const formatPrice = (price: number) => {
+    return price.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  };
+
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    setSortByPrice(value === 'price');
+  };
+
+  return (
+    <div className='h-full'>
+      <div className='max-w-6xl w-full mx-auto my-5'>
+        <div className='m-2'>
+          <select
+            value={sortByPrice ? 'price' : 'default'}
+            onChange={handleSortChange}
+            className='bg-white border border-black text-zinc-900 my-5 py-1 px-2'
+          >
+            <option value='default'>Ordenação Padrão</option>
+            <option value='price'>Ordenado por Preço</option>
+          </select>
+          <ul className='text-black grid grid-cols-4 gap-3 max-xl:grid-cols-2 max-md:grid-cols-1'>
+            {sortedCars.map((car) => (
+              <li key={car.id} className='shadow-md bg-zinc-600 shadow-black flex flex-col justify-between'>
+                <div className='text-white font-vazirmatn font-normal text-1xl  bg-zinc-600 w-full p-2'>{car.brand} </div>
+                <div className='w-full'>
+                  <img src={car.main_photo} alt={car.name} className='w-full object-cover' />
+                </div>
+                <div className='bg-zinc-600 p-4'>
+                  <span className='text-white font-vazirmatn font-normal text-1xl'>{car.name} </span>
+                  <span className='text-white font-vazirmatn font-normal text-1xl'>{car.model} </span>
+                  <p className='text-white font-vazirmatn font-bold text-3xl'>{formatPrice(car.price)}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
